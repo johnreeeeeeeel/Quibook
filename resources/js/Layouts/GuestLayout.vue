@@ -39,8 +39,19 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { Icon } from '@iconify/vue';
+
+export default {
+
+  components: {
+    Icon, 
+  },
+
+  methods: {
+    
+  },
+};
 </script>
 
 <style scoped>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\NoteController;
 
 Route::get('/', function () {
     return view('pages.index');
@@ -24,6 +25,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('pages.home');
     });
+
+    // Notes API routes
+    Route::get('/api/notes', [NoteController::class, 'index']);
+    Route::post('/api/notes', [NoteController::class, 'store']);
+    Route::put('/api/notes/{noteId}', [NoteController::class, 'update']);
+    Route::delete('/api/notes/{noteId}', [NoteController::class, 'destroy']);
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
