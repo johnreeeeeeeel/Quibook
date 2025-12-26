@@ -15,19 +15,22 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Invalid email or password'
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'Invalid email or password',
+                ],
+                422,
+            );
         }
 
         $request->session()->regenerate();
 
         return response()->json([
-            'message' => 'Login Successful. Redirecting...'
+            'message' => 'Login Successful. Redirecting...',
         ]);
     }
 
@@ -53,9 +56,12 @@ class AuthController extends Controller
 
         // Check if email already exists
         if (User::where('email', $request->email)->exists()) {
-            return response()->json([
-                'message' => 'Email already registered'
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'Email already registered',
+                ],
+                422,
+            );
         }
 
         $otp = rand(100000, 999999);
@@ -73,7 +79,7 @@ class AuthController extends Controller
         Mail::to($request->email)->send(new OtpMail($otp));
 
         return response()->json([
-            'message' => 'OTP sent to your email'
+            'message' => 'OTP sent to your email',
         ]);
     }
 
@@ -81,36 +87,34 @@ class AuthController extends Controller
     public function verifyOtp(Request $request)
     {
         $request->validate([
-            'otp' => 'required'
+            'otp' => 'required',
         ]);
 
         // Check if OTP exists and is not expired
-        if (
-            !session()->has('otp') ||
-            now()->gt(session('otp_expires_at'))
-        ) {
-            session()->forget([
-                'otp',
-                'otp_name',
-                'otp_email',
-                'otp_password',
-                'otp_expires_at'
-            ]);
+        if (!session()->has('otp') || now()->gt(session('otp_expires_at'))) {
+            session()->forget(['otp', 'otp_name', 'otp_email', 'otp_password', 'otp_expires_at']);
 
-            return response()->json([
-                'message' => 'OTP expired'
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'OTP expired',
+                ],
+                422,
+            );
         }
 
         // Check OTP match
         if ($request->otp != session('otp')) {
-            return response()->json([
-                'message' => 'Invalid OTP'
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'Invalid OTP',
+                ],
+                422,
+            );
         }
 
         // Create the user
         User::create([
+            'user_id' => 'QBK' . rand(1000, 9999) . '-' . rand(1000, 9999),
             'name' => session('otp_name'),
             'email' => session('otp_email'),
             'password' => session('otp_password'),
@@ -118,16 +122,10 @@ class AuthController extends Controller
         ]);
 
         // Clear session
-        session()->forget([
-            'otp',
-            'otp_name',
-            'otp_email',
-            'otp_password',
-            'otp_expires_at'
-        ]);
+        session()->forget(['otp', 'otp_name', 'otp_email', 'otp_password', 'otp_expires_at']);
 
         return response()->json([
-            'message' => 'Sign up Successful. Redirecting...'
+            'message' => 'Sign up Successful. Redirecting...',
         ]);
     }
 }

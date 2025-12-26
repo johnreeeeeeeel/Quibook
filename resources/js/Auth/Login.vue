@@ -120,9 +120,9 @@ export default {
 }
 
 .login-section {
+    background-color: transparent;
     border-radius: 18px;
-    background-color: #FFFFFF;
-    max-width: 460px;
+    max-width: 440px;
     padding: 38px 18px;
     display: flex;
     flex-direction: column;

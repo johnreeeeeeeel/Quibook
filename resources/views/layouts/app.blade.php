@@ -16,7 +16,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 
-    @vite('resources/js/app.js')
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Vite Assets Alternative -->
+    <!--
+    <link rel="stylesheet" href="{{ asset('build/assets/app-BOEqnadv.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/assets/app-tn0RQdqM.css') }}">
+    <script src="{{ asset('build/assets/app-YXKCAwTu.js') }}" defer></script>
+    -->
 
     <style>
         body {
