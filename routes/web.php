@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\TodoController;
+use App\Http\Controllers\ChecklistController;
 
 Route::get('/', function () {
     return view('pages.index');
@@ -26,11 +29,31 @@ Route::middleware('auth')->group(function () {
         return view('pages.home');
     });
 
-    // Notes API routes
+    // Notes
     Route::get('/api/notes', [NoteController::class, 'index']);
     Route::post('/api/notes', [NoteController::class, 'store']);
     Route::put('/api/notes/{noteId}', [NoteController::class, 'update']);
     Route::delete('/api/notes/{noteId}', [NoteController::class, 'destroy']);
+
+    // Reminders
+    Route::get('/api/reminders', [ReminderController::class, 'index']);
+    Route::post('/api/reminders', [ReminderController::class, 'store']);
+    Route::put('/api/reminders/{reminderId}', [ReminderController::class, 'update']);
+    Route::delete('/api/reminders/{reminderId}', [ReminderController::class, 'destroy']);
+
+    // To Do
+    Route::get('/api/todos', [TodoController::class, 'index']);
+    Route::post('/api/todos', [TodoController::class, 'store']);
+    Route::put('/api/todos/{todoId}', [TodoController::class, 'update']);
+    Route::delete('/api/todos/{todoId}', [TodoController::class, 'destroy']);
+
+    // Checklists
+    Route::get('/api/checklists', [ChecklistController::class, 'index']);
+    Route::post('/api/checklists', [ChecklistController::class, 'store']);
+    Route::put('/api/checklists/{checklistId}', [ChecklistController::class, 'update']);
+    Route::delete('/api/checklists/{checklistId}', [ChecklistController::class, 'destroy']);
+    Route::post('/api/checklists/{checklistId}/items', [ChecklistController::class, 'addItem']);
+    Route::patch('/api/checklist-items/{itemId}', [ChecklistController::class, 'toggleItem']);
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');

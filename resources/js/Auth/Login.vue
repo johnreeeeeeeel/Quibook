@@ -8,7 +8,6 @@
             <p>Welcome back, login to continue.</p>
 
             <form @submit.prevent="login">
-                <p class="input-success" v-if="success">{{ success }}</p>
                 <p class="input-error" v-if="error">{{ error }}</p>
 
                 <label for="email" class="input-label">Email</label>
@@ -54,7 +53,6 @@ export default {
             email: '',
             password: '',
             showPassword: false,
-            success: '',
             error: '',
             loginLoading: false,
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -62,7 +60,6 @@ export default {
     },
     methods: {
         async login() {
-            this.success = '';
             this.error = '';
             this.loginLoading = true;
 
@@ -72,7 +69,7 @@ export default {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': this.csrf,
-                        'Accept': 'application/json' // <-- ensure Laravel returns JSON
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         email: this.email,
@@ -84,8 +81,9 @@ export default {
 
                 if (!res.ok) throw new Error(data.message || 'Login failed');
 
-                this.success = data.message;
-                setTimeout(() => window.location.href = '/home', 1000);
+                // DIRECT redirect — no success message
+                window.location.href = '/home';
+
             } catch (err) {
                 this.error = err.message || 'Server error. Please try again.';
             } finally {

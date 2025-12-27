@@ -29,9 +29,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json([
-            'message' => 'Login Successful. Redirecting...',
-        ]);
+        return response()->json([], 200);
     }
 
     // LOGOUT
